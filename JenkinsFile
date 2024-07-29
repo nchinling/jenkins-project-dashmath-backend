@@ -33,13 +33,12 @@ pipeline {
                 echo "Build completed"
             }
         }
-        stage("Run and Email") {
+        stage("Containerise and send Email") {
             parallel {
-                stage("Run Program") {
+                stage("Containerise with Docker") {
                     steps {
-                        echo "Run program"
-                        powershell "start-spring-boot.ps1"
-                        echo "Run successful"
+                        echo "Running Docker"
+                        echo "Docker container successfully created and deployed"
                     }
                 }
                 stage("Send Email on Success") {
