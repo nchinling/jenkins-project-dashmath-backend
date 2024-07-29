@@ -61,7 +61,6 @@ pipeline {
                         }
                         stage('Push Docker Image') {
                             steps {
-								dir('') {
                                 script {
                                     echo "Pushing Docker image"
                                     withCredentials([usernamePassword(credentialsId: 'nchinling-dockerhub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
@@ -72,7 +71,6 @@ pipeline {
                                         bat 'docker push nchinling/jenkins_dashmath_repo:latest'
                                     }
                                 }
-								}
                             }
                         }
                     }
