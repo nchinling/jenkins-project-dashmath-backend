@@ -2,7 +2,7 @@ pipeline {
     agent any
 
 	environment {
-        DOCKERHUB_CREDENTIALS = credentials{'nchinling-dockerhub'}  // Jenkins credentials ID for Docker Hub
+        DOCKERHUB_CREDENTIALS = credentials{"nchinling-dockerhub"}  // Jenkins credentials ID for Docker Hub
         DOCKER_IMAGE_NAME = 'nchinling/jenkins_dashmath_repo'   // repo in Dockerhub
         DOCKER_IMAGE_TAG = 'latest'  
     }
