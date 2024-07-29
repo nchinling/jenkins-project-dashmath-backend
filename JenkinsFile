@@ -33,12 +33,12 @@ pipeline {
                 echo "Build completed"
             }
         }
-        stage("Run") {
+        stage("Run and Email") {
             parallel {
                 stage("Run Program") {
                     steps {
                         echo "Run program"
-                        bat "mvn spring-boot:run"
+                        bat "start /B mvn spring-boot:run"
                         echo "Run successful"
                     }
                 }
