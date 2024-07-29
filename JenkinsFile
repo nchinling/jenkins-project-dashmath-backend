@@ -40,7 +40,7 @@ pipeline {
                 echo "Build completed"
             }
         }
-        stage("Containerize and Send Email") {
+        stage("Containerise and Send Email") {
             parallel {
                 stage('Send Email on Build Success') {
                     steps {
@@ -55,7 +55,7 @@ pipeline {
                             steps {
                                 script {
                                     echo "Building Docker image"
-                                    // bat 'docker build -t nchinling/jenkins_dashmath_repo:latest .'
+                                    bat 'docker build -t nchinling/jenkins_dashmath_repo:latest .'
                                 }
                             }
                         }
@@ -65,14 +65,20 @@ pipeline {
                                     echo "Pushing Docker image"
                                     withCredentials([usernamePassword(credentialsId: 'nchinling-dockerhub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
                                         bat "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-										echo "login to dockerhub succeeded"
-										echo "Building Docker image"
-                                    	bat 'docker build -t nchinling/jenkins_dashmath_repo:latest .'
+										echo "Login to Docker Hub succeeded"
                                         bat 'docker push nchinling/jenkins_dashmath_repo:latest'
+										echo "Image pushed to Docker Hub successfully"
                                     }
                                 }
                             }
                         }
+						stage('Send Email on successful push to Docker Hub') {
+							steps {
+								script {
+									mail bcc: '', body: 'Hello, This is an email from Jenkins pipeline. Push to Docker Hub is successful.', cc: '', from: '', replyTo: '', subject: 'Build Successful', to: 'nchinling@gmail.com'
+								}
+							}
+						}
                     }
                 }
             }
