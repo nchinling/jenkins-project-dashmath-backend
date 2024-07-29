@@ -38,7 +38,7 @@ pipeline {
                 stage("Run Program") {
                     steps {
                         echo "Run program"
-                        bat "wsl nohup mvn spring-boot:run &"
+                        bat "nohup mvn spring-boot:run &"
                         echo "Run successful"
                     }
                 }
