@@ -1,5 +1,12 @@
 pipeline {
     agent any
+
+	environment {
+        DOCKER_CREDENTIALS_ID = 'nchinling-dockerhub'  // Jenkins credentials ID for Docker Hub
+        DOCKER_IMAGE_NAME = 'nchinling/jenkins_dashmath_repo'   // repo in Dockerhub
+        DOCKER_IMAGE_TAG = 'latest'  
+    }
+
     tools {
         maven 'maven_3.8.7'
         jdk 'JDK21'
@@ -35,12 +42,32 @@ pipeline {
         }
         stage("Containerise and send Email") {
             parallel {
-                stage("Containerise with Docker") {
-                    steps {
-                        echo "Running Docker"
-                        echo "Docker container successfully created and deployed"
-                    }
-                }
+                // stage("Containerise with Docker") {
+                //     steps {
+                //         echo "Running Docker"
+                //         echo "Docker container successfully created and"
+                //     }
+                // }
+				stage('Build Docker Image') {
+					steps {
+						script {
+							// Build Docker image
+							docker.build("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}")
+						}
+					}
+				}
+        
+				stage('Push Docker Image') {
+					steps {
+						script {
+							// Login to Docker Hub
+							docker.withRegistry('https://index.docker.io/v2/', "${DOCKER_CREDENTIALS_ID}") {
+								// Push Docker image to Docker Hub
+								docker.image("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}").push("${DOCKER_IMAGE_TAG}")
+							}
+						}
+					}
+				}
                 stage("Send Email on Success") {
                     steps {
                         script {
