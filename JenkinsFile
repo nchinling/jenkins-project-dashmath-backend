@@ -43,24 +43,19 @@ pipeline {
             parallel {
 				stage('Build Docker Image') {
 					steps {
-						script {
 							// Build Docker image
-							docker.build("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}")
-						}
+							bat 'docker build -t nchinling/jenkins_dashmath_repo:latest .'
+						
 					}
 				}
         
 				stage('Push Docker Image') {
+					agent any
 					steps {
-						script {
-                            withCredentials([usernamePassword(credentialsId: 'nchinling-dockerhub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                                // Login to Docker Hub
-                                docker.withRegistry('https://index.docker.io/v2/', "${DOCKER_USERNAME}:${DOCKER_PASSWORD}") {
-                                    // Push Docker image to Docker Hub
-                                    docker.image("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}").push("${DOCKER_IMAGE_TAG}")
-                                }
-                            }
-                        }
+						withCredentials([usernamePassword(credentialsId: 'nchinling-dockerhub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+						bat "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+						bat 'docker push nchinling/jenkins_dashmath_repo:latest'
+						}
 					}
 				}
                 stage("Send Email on Build Success") {
