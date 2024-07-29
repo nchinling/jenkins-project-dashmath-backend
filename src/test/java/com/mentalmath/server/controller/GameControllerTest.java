@@ -34,7 +34,7 @@ public class GameControllerTest {
 
         ResponseEntity<String> responseEntity = gameController.generateQuestion();
 
-        assertEquals(200, responseEntity.getStatusCode());
+        assertEquals(200, responseEntity.getStatusCode().value());
         assertEquals("{\"question\":\"What is 2 + 2?\"}", responseEntity.getBody());
     }
 
@@ -49,7 +49,7 @@ public class GameControllerTest {
 
         ResponseEntity<String> responseEntity = gameController.checkAnswer(form);
 
-        assertEquals(200, responseEntity.getStatusCode());
+        assertEquals(200, responseEntity.getStatusCode().value());
         assertEquals("{\"markedQuestion\":\"Correct!\"}", responseEntity.getBody());
     }
 }
