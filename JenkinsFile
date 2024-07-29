@@ -2,7 +2,7 @@ pipeline {
     agent any
 
 	environment {
-        DOCKER_CREDENTIALS = credentials{'nchinling-dockerhub'}  // Jenkins credentials ID for Docker Hub
+        DOCKERHUB_CREDENTIALS = credentials{'nchinling-dockerhub'}  // Jenkins credentials ID for Docker Hub
         DOCKER_IMAGE_NAME = 'nchinling/jenkins_dashmath_repo'   // repo in Dockerhub
         DOCKER_IMAGE_TAG = 'latest'  
     }
@@ -55,7 +55,7 @@ pipeline {
 					steps {
 						script {
 							// Login to Docker Hub
-							docker.withRegistry('https://index.docker.io/v2/', "${DOCKER_CREDENTIALS}") {
+							docker.withRegistry('https://index.docker.io/v2/', "${DOCKERHUB_CREDENTIALS}") {
 								// Push Docker image to Docker Hub
 								docker.image("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}").push("${DOCKER_IMAGE_TAG}")
 							}
