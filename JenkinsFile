@@ -42,12 +42,6 @@ pipeline {
         }
         stage("Containerise and send Email") {
             parallel {
-                // stage("Containerise with Docker") {
-                //     steps {
-                //         echo "Running Docker"
-                //         echo "Docker container successfully created and"
-                //     }
-                // }
 				stage('Build Docker Image') {
 					steps {
 						script {
