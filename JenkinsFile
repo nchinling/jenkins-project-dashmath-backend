@@ -55,7 +55,7 @@ pipeline {
                             steps {
                                 script {
                                     echo "Building Docker image"
-                                    bat 'docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} .'
+                                    bat 'docker build -t nchinling/jenkins_dashmath_repo:latest .'
                                 }
                             }
                         }
@@ -65,7 +65,8 @@ pipeline {
                                     echo "Pushing Docker image"
                                     withCredentials([usernamePassword(credentialsId: 'nchinling-dockerhub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
                                         bat "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-                                        bat 'docker push ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}'
+										echo "login to dockerhub succeeded"
+                                        bat 'docker push nchinling/jenkins_dashmath_repo:latest'
                                     }
                                 }
                             }
