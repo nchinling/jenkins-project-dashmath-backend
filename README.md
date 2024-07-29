@@ -1,3 +1,6 @@
+# Jenkins Pipeline Project
+This is a pipeline project implemented with Jenkins. 
+
 # Dash Math
 Dash Math is an arithmetic math game for people of all ages. Players attempt to complete as many arithmetic questions in 1 minute. The motivation behind creating this game is for users to have some short fun and keep their numerical reasoning sharp. 
 
