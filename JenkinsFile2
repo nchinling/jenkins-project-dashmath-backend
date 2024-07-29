@@ -1,0 +1,63 @@
+pipeline{
+	agent any
+	tools{
+		maven 'maven_3.8.7'
+		jdk 'JDK21'
+	}
+	stages
+	{
+		stage("Clean"){
+			steps{
+				echo "Start Clean"
+				bat "mvn clean"
+				echo "Clean successful"
+			}
+			
+		
+		}
+		stage("Test"){
+			steps{
+				echo "Start Test"
+				bat "mvn test"
+				echo "Test completed"
+			}
+		
+		}
+		stage("Sonar"){
+			steps{
+				echo "Start Sonar"
+				bat "mvn sonar:sonar"
+				echo "Sonar completed"
+			}
+		
+		}
+		stage("Build"){
+			steps{
+				echo "Start Build"
+				bat "mvn install -DskipTests"
+				echo "Build completed"
+			}
+		}
+		stage("Run"){
+			steps{
+				echo "Run program"
+				bat "mvn spring-boot:run"
+				echo "Run successful"
+			}
+		
+		}
+	}
+	post {
+			success {
+				mail bcc: '', body: 'Hello, This is an email from Jenkins pipeline. Build is successful.', cc: '', from: '', replyTo: '', subject: 'Build Successful', to: 'nchinling@gmail.com'
+			}
+			failure {
+				mail bcc: '', body: 'Hello, This is an email from Jenkins pipeline. Build has failed. Please check the logs for details.', cc: '', from: '', replyTo: '', subject: 'Build Failed', to: 'nchinling@gmail.com'
+			}
+	}
+
+	
+	
+}
+
+
