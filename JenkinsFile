@@ -2,7 +2,7 @@ pipeline {
     agent any
 
 	environment {
-        DOCKER_CREDENTIALS_ID = credentials{'nchinling-dockerhub'}  // Jenkins credentials ID for Docker Hub
+        DOCKER_CREDENTIALS = credentials{'nchinling-dockerhub'}  // Jenkins credentials ID for Docker Hub
         DOCKER_IMAGE_NAME = 'nchinling/jenkins_dashmath_repo'   // repo in Dockerhub
         DOCKER_IMAGE_TAG = 'latest'  
     }
@@ -55,14 +55,14 @@ pipeline {
 					steps {
 						script {
 							// Login to Docker Hub
-							docker.withRegistry('https://index.docker.io/v2/', "${DOCKER_CREDENTIALS_ID}") {
+							docker.withRegistry('https://index.docker.io/v2/', "${DOCKER_CREDENTIALS}") {
 								// Push Docker image to Docker Hub
 								docker.image("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}").push("${DOCKER_IMAGE_TAG}")
 							}
 						}
 					}
 				}
-                stage("Send Email on Success") {
+                stage("Send Email on Build Success") {
                     steps {
                         script {
                             mail bcc: '', body: 'Hello, This is an email from Jenkins pipeline. Build is successful.', cc: '', from: '', replyTo: '', subject: 'Build Successful', to: 'nchinling@gmail.com'
@@ -75,7 +75,7 @@ pipeline {
     post {
         failure {
             script {
-                mail bcc: '', body: 'Hello, This is an email from Jenkins pipeline. Build has failed. Please check the logs for details.', cc: '', from: '', replyTo: '', subject: 'Build Failed', to: 'nchinling@gmail.com'
+                mail bcc: '', body: 'Hello, This is an email from Jenkins pipeline. Build or containerisation has failed. Please check the logs for details.', cc: '', from: '', replyTo: '', subject: 'Build Failed', to: 'nchinling@gmail.com'
             }
         }
     }
