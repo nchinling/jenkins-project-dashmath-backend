@@ -6,7 +6,6 @@ WORKDIR /app
 COPY pom.xml mvnw ./
 COPY .mvn .mvn
 # Make the Maven Wrapper executable
-RUN chmod +x mvnw
 RUN ./mvnw dependency:resolve
 
 COPY src src

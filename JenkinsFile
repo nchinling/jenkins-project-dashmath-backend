@@ -1,8 +1,8 @@
 pipeline {
     agent any
 
-	environment {
-        DOCKER_IMAGE_NAME = 'nchinling/jenkins_dashmath_repo'   // repo in Dockerhub
+    environment {
+        DOCKER_IMAGE_NAME = 'nchinling/jenkins_dashmath_repo'  // Docker repo name
         DOCKER_IMAGE_TAG = 'latest'  
     }
 
@@ -10,6 +10,7 @@ pipeline {
         maven 'maven_3.8.7'
         jdk 'JDK21'
     }
+
     stages {
         stage("Clean") {
             steps {
@@ -39,35 +40,42 @@ pipeline {
                 echo "Build completed"
             }
         }
-        stage("Containerise and send Email") {
+        stage("Containerize and Send Email") {
             parallel {
-				stage('Build Docker Image') {
-					steps {
-							// Build Docker image
-							bat 'docker build -t nchinling/jenkins_dashmath_repo:latest .'
-						
-					}
-				}
-        
-				stage('Push Docker Image') {
-					agent any
-					steps {
-						withCredentials([usernamePassword(credentialsId: 'nchinling-dockerhub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-						bat "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-						bat 'docker push nchinling/jenkins_dashmath_repo:latest'
-						}
-					}
-				}
-                stage("Send Email on Build Success") {
+                stage('Send Email on Build Success') {
                     steps {
                         script {
                             mail bcc: '', body: 'Hello, This is an email from Jenkins pipeline. Build is successful.', cc: '', from: '', replyTo: '', subject: 'Build Successful', to: 'nchinling@gmail.com'
                         }
                     }
                 }
+                stage('Docker Operations') {
+                    stages {
+                        stage('Build Docker Image') {
+                            steps {
+                                script {
+                                    echo "Building Docker image"
+                                    bat 'docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} .'
+                                }
+                            }
+                        }
+                        stage('Push Docker Image') {
+                            steps {
+                                script {
+                                    echo "Pushing Docker image"
+                                    withCredentials([usernamePassword(credentialsId: 'nchinling-dockerhub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+                                        bat "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+                                        bat 'docker push ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
+
     post {
         failure {
             script {
