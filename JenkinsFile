@@ -38,7 +38,7 @@ pipeline {
                 stage("Run Program") {
                     steps {
                         echo "Run program"
-                        bat "start-spring-boot.bat"
+                        powershell "start-spring-boot.ps1"
                         echo "Run successful"
                     }
                 }
@@ -48,14 +48,14 @@ pipeline {
                             mail bcc: '', body: 'Hello, This is an email from Jenkins pipeline. Build is successful.', cc: '', from: '', replyTo: '', subject: 'Build Successful', to: 'nchinling@gmail.com'
                         }
                     }
-                    post {
-                        failure {
-                            script {
-                                mail bcc: '', body: 'Hello, This is an email from Jenkins pipeline. Build has failed. Please check the logs for details.', cc: '', from: '', replyTo: '', subject: 'Build Failed', to: 'nchinling@gmail.com'
-                            }
-                        }
-                    }
                 }
+            }
+        }
+    }
+    post {
+        failure {
+            script {
+                mail bcc: '', body: 'Hello, This is an email from Jenkins pipeline. Build has failed. Please check the logs for details.', cc: '', from: '', replyTo: '', subject: 'Build Failed', to: 'nchinling@gmail.com'
             }
         }
     }
