@@ -70,7 +70,7 @@ pipeline {
 						stage('Send Email on successful push to Docker Hub') {
 							steps {
 								script {
-									mail bcc: '', body: 'Hello, This is an email from Jenkins pipeline. Push to Docker Hub is successful.', cc: '', from: '', replyTo: '', subject: 'Build Successful', to: 'nchinling@gmail.com'
+									mail bcc: '', body: 'Hello, This is an email from Jenkins pipeline. Push to Docker Hub is successful.', cc: '', from: '', replyTo: '', subject: 'Docker Build and Push Successful', to: 'nchinling@gmail.com'
 								}
 							}
 						}
@@ -83,7 +83,7 @@ pipeline {
     post {
         failure {
             script {
-                mail bcc: '', body: 'Hello, This is an email from Jenkins pipeline. Build or containerisation has failed. Please check the logs for details.', cc: '', from: '', replyTo: '', subject: 'Build Failed', to: 'nchinling@gmail.com'
+                mail bcc: '', body: 'Hello, This is an email from Jenkins pipeline. Build or containerisation has failed. Please check the logs for details.', cc: '', from: '', replyTo: '', subject: 'Build / Containerisation Failed', to: 'nchinling@gmail.com'
             }
         }
     }
