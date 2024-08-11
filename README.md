@@ -1,6 +1,8 @@
 # Jenkins Pipeline Project
 This is a pipeline project implemented with Jenkins. The pipeline is created with a JenkinsFile (Jenkinsfile) using a declarative approach and implements the following:
 
+![alt text](readme_images/jenkinslogo.png)
+
 1. clean - 'mvn clean' command clears files from previous build. 
 2. unit tests - with JUnit
 3. static code anaysis - SonarQube. Includes code coverage analysis.
