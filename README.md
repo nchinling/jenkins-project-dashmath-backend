@@ -13,3 +13,4 @@ This is a pipeline project implemented with Jenkins. The pipeline is created wit
 ![alt text](readme_images/pipeline.png)
 
 The pipeline builds the Dash Math project, which can be found at https://github.com/nchinling/mental-math-game
+Visit https://ngchinling.com/projects/jenkins.html for more information on the project. 
